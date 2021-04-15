@@ -47,17 +47,22 @@ class App extends React.Component {
     ret.then((response)=>{
 
       //Include code here to check the sentiment and fomrat the data accordingly
+      
+      
 
-      this.setState({sentimentOutput:response.data});
-      let output = response.data;
-      if(response.data === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>{response.data}</div>
-      } else if (response.data === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>{response.data}</div>
+      this.setState({sentimentOutput:response.data.score});
+      let output = response.data.score;
+      if(response.data.label === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{response.data.score}</div>
+      } else if (response.data.label === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{response.data.score}</div>
       } else {
-        output = <div style={{color:"orange",fontSize:20}}>{response.data}</div>
+        output = <div style={{color:"yellow",fontSize:20}}>{response.data.score}</div>
       }
       this.setState({sentimentOutput:output});
+    })
+    .catch(err => {
+        this.setState({sentimentOutput:err.toString()});
     });
   }
 
@@ -74,7 +79,10 @@ class App extends React.Component {
 
     ret.then((response)=>{
       this.setState({sentimentOutput:<EmotionTable emotions={response.data}/>});
-  });
+    })
+    .catch(err => {
+            this.setState(err.toString());
+    });
   }
   
 
